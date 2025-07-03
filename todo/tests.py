@@ -53,6 +53,7 @@ class TaskModelCase(TestCase):
 
         self.assertFalse(task.is_overdue(current))
 
+
 class TodoViewTestCase(TestCase):
     def test_index_get(self):
         client = Client()
@@ -91,3 +92,8 @@ class TodoViewTestCase(TestCase):
         task2.save()
         client = Client()
         response = client.get('/?order=due')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.templates[0].name, 'todo/index.html')
+        self.assertEqual(response.context['tasks'][0],task1)
+        self.assertEqual(response.context['tasks'][1],task2)
